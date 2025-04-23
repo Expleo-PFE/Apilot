@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Apilot.Domain.Entities;
 
-public class HttpResponse : BaseEntity
+public class ResponseEntity : BaseEntity
 {
     public int StatusCode { get; set; }
     public string StatusText { get; set; }
@@ -11,10 +11,10 @@ public class HttpResponse : BaseEntity
     public int ResponseTime { get; set; }
     public int ResponseSize { get; set; }
     public string Body { get; set; }
-    public ResponseCookies Cookies { get; set; }
+    public ResponseCookiesEntity CookiesEntity { get; set; }
     
     public int RequestId { get; set; }
-    public HttpRequest HttpRequest { get; set; }
+    public RequestEntity Request { get; set; }
     
     
 }

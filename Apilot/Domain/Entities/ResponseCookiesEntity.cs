@@ -1,6 +1,6 @@
 ﻿namespace Apilot.Domain.Entities;
 
-public class ResponseCookies
+public class ResponseCookiesEntity
 {
     public string CookieName { get; set; }
     public string CookieValue { get; set; }
