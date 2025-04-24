@@ -23,7 +23,6 @@
 
     <ItemGroup>
       <Folder Include="Application\Common\" />
-      <Folder Include="Application\DTOs\" />
       <Folder Include="Application\Features\" />
       <Folder Include="Application\Interfaces\" />
       <Folder Include="Infrastructure\Persistence\" />

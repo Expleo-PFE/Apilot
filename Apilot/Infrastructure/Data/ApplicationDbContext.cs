@@ -2,15 +2,12 @@
 using Apilot.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Apilot.Infrastructure.Data;
 
 public class ApplicationDbContext : DbContext
 {
-   
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-        
     }
 
     public DbSet<WorkSpaceEntity> WorkSpaces { get; set; }
@@ -21,7 +18,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<EnvironementEntity> Environements { get; set; }
     public DbSet<HistoryEntity> Histories { get; set; }
     
-     protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
@@ -73,7 +70,17 @@ public class ApplicationDbContext : DbContext
 
         // Complex types and owned entities
         modelBuilder.Entity<RequestEntity>()
-            .OwnsOne(r => r.Authentication);
+            .OwnsOne(r => r.Authentication, authentication =>
+            {
+                // Configure the owned entity's properties here
+                authentication.Property(a => a.AuthType);
+                
+                // Configure the Dictionary property within the owned entity
+                authentication.Property(a => a.AuthData)
+                    .HasConversion(
+                        v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+                        v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, new JsonSerializerOptions()) ?? new Dictionary<string, string>());
+            });
 
         modelBuilder.Entity<ResponseEntity>()
             .OwnsOne(r => r.CookiesEntity);
@@ -82,26 +89,21 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<EnvironementEntity>()
             .Property(e => e.Variables)
             .HasConversion(
-                v => System.Text.Json.JsonSerializer.Serialize(v, new JsonSerializerOptions() ),
-                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v, new JsonSerializerOptions()) ?? new Dictionary<string, string>());
+                v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+                v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, new JsonSerializerOptions()) ?? new Dictionary<string, string>());
 
         modelBuilder.Entity<RequestEntity>()
             .Property(r => r.Headers)
             .HasConversion(
-                v => System.Text.Json.JsonSerializer.Serialize(v,  new JsonSerializerOptions()),
-                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v,  new JsonSerializerOptions()) ?? new Dictionary<string, string>());
+                v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+                v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, new JsonSerializerOptions()) ?? new Dictionary<string, string>());
 
         modelBuilder.Entity<ResponseEntity>()
             .Property(r => r.Headers)
             .HasConversion(
-                v => System.Text.Json.JsonSerializer.Serialize(v,  new JsonSerializerOptions()),
-                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v,  new JsonSerializerOptions()) ?? new Dictionary<string, string>());
+                v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+                v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, new JsonSerializerOptions()) ?? new Dictionary<string, string>());
 
-        modelBuilder.Entity<AuthenticationEntity>()
-            .Property(a => a.AuthData)
-            .HasConversion(
-                v => System.Text.Json.JsonSerializer.Serialize(v,  new JsonSerializerOptions()),
-                v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(v,  new JsonSerializerOptions()) ?? new Dictionary<string, string>());
+      
     }
-
 }

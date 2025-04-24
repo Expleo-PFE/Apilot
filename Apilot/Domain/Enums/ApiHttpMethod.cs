@@ -1,6 +1,6 @@
 ﻿namespace Apilot.Domain.Enums;
 
-public enum HttpMethod
+public enum ApiHttpMethod
 {
     GET,
     POST,
