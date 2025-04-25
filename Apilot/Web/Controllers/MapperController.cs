@@ -283,8 +283,8 @@ public class MapperController : ControllerBase
     [HttpPost("createHistory")]
     public async Task<IActionResult> CreateHistory([FromBody] CreateHistoryDto createHistoryDto)
     {
-       var req = _mapper.Map<RequestHistoryEntity>(createHistoryDto.Requests);
-       var requestList = new List<RequestHistoryEntity>{req};
+       var req = _mapper.Map<RequestEntity>(createHistoryDto.Requests);
+       var requestList = new List<RequestEntity>{req};
        
         var history = new HistoryEntity
         {

@@ -24,7 +24,6 @@ public class MappingProfile : Profile
         CreateMap<ResponseCookiesEntity, ResponseCookiesDto>().ReverseMap();
         CreateMap<EnvironementEntity, EnvironmentDto>().ReverseMap();
         CreateMap<HistoryEntity, HistoryDto>().ReverseMap();
-        CreateMap<RequestHistoryEntity, RequestHistoryDto>().ReverseMap();
 
         
     }
