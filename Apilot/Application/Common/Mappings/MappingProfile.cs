@@ -15,15 +15,17 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<WorkSpaceEntity , WorkSpaceDto>();
-        CreateMap<CollectionEntity , CollectionDto>();
-        CreateMap<FolderEntity , FolderDto>();
-        CreateMap<RequestEntity , RequestDto>();
-        CreateMap<AuthenticationEntity , AuthenticationDto>();
-        CreateMap<ResponseEntity , ResponseDto>();
-        CreateMap<ResponseCookiesEntity , ResponseCookiesDto>();
-        CreateMap<EnvironementEntity , EnvironmentDto>();
-        CreateMap<HistoryEntity , HistoryDto>();
+        CreateMap<WorkSpaceEntity, WorkSpaceDto>().ReverseMap();
+        CreateMap<CollectionEntity, CollectionDto>().ReverseMap();
+        CreateMap<FolderEntity, FolderDto>().ReverseMap();
+        CreateMap<RequestEntity, RequestDto>().ReverseMap();
+        CreateMap<AuthenticationEntity, AuthenticationDto>().ReverseMap();
+        CreateMap<ResponseEntity, ResponseDto>().ReverseMap();
+        CreateMap<ResponseCookiesEntity, ResponseCookiesDto>().ReverseMap();
+        CreateMap<EnvironementEntity, EnvironmentDto>().ReverseMap();
+        CreateMap<HistoryEntity, HistoryDto>().ReverseMap();
+        CreateMap<RequestHistoryEntity, RequestHistoryDto>().ReverseMap();
+
         
     }
 }

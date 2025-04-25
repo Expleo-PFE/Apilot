@@ -27,7 +27,6 @@
       <Folder Include="Application\Interfaces\" />
       <Folder Include="Infrastructure\Persistence\" />
       <Folder Include="Infrastructure\Services\" />
-      <Folder Include="Web\Controllers\" />
     </ItemGroup>
 
 </Project>

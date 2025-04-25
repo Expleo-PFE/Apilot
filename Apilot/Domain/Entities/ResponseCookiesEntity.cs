@@ -2,10 +2,10 @@
 
 public class ResponseCookiesEntity
 {
-    public string CookieName { get; set; }
-    public string CookieValue { get; set; }
-    public string CookieDomain { get; set; }
-    public string CookiePath { get; set; }
+    public required string CookieName { get; set; }
+    public required string CookieValue { get; set; }
+    public required string CookieDomain { get; set; }
+    public required string CookiePath { get; set; }
     public DateTime CookieExpires { get; set; }
     public bool HttpOnly { get; set; }
     public bool Secure { get; set; }

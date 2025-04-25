@@ -9,7 +9,7 @@ public class ResponseDto
     public int ResponseTime { get; set; }
     public int ResponseSize { get; set; }
     public required string Body { get; set; }
-    public required ResponseCookiesDto Cookies { get; set; }
+    public required ResponseCookiesDto CookiesEntity { get; set; }
     
     public int RequestId { get; set; }
     
