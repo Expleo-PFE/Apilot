@@ -34,6 +34,12 @@ public class ApplicationDbContext : DbContext
             .WithOne(e => e.WorkSpaceEntity)
             .HasForeignKey(e => e.WorkSpaceId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<WorkSpaceEntity>()
+            .HasMany(w => w.Histories)
+            .WithOne(e => e.WorkSpace)
+            .HasForeignKey(e => e.WorkSpaceId)
+            .OnDelete(DeleteBehavior.Cascade);
 
        
         modelBuilder.Entity<CollectionEntity>()
@@ -63,6 +69,29 @@ public class ApplicationDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
        
+        modelBuilder.Entity<HistoryEntity>()
+            .OwnsMany(r => r.Requests, req =>
+            {
+             
+                req.Property(a => a.Url);
+                req.Property(a => a.Body);
+                req.Property(a => a.HttpMethod);
+              
+                req.Property(a => a.Headers)
+                    .HasConversion(
+                        v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+                        v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, new JsonSerializerOptions()) ?? new Dictionary<string, string>());
+                
+                req.OwnsOne(r => r.Authentication, authentication =>
+                {
+                    authentication.Property(a => a.AuthType);
+
+                    authentication.Property(a => a.AuthData)
+                        .HasConversion(
+                            v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+                            v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, new JsonSerializerOptions()) ?? new Dictionary<string, string>());
+                });
+            });
         
         modelBuilder.Entity<RequestEntity>()
             .OwnsOne(r => r.Authentication, authentication =>

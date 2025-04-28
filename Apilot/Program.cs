@@ -26,6 +26,7 @@ builder.Services.AddScoped<IEnvironmentService, EnvironmentService>();
 builder.Services.AddScoped<IFolderService , FolderService>();
 builder.Services.AddScoped<IRequestService , RequestService>();
 builder.Services.AddScoped<IResponseService , ResponseService>();
+builder.Services.AddScoped<IHistoryService , HistoryService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

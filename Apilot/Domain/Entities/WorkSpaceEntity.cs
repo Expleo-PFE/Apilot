@@ -10,4 +10,5 @@ public class WorkSpaceEntity : BaseEntity
     
     public List<CollectionEntity> Collections { get; set; }
     public List<EnvironmentEntity> Environements { get; set; }
+    public List<HistoryEntity> Histories { get; set; }
 }

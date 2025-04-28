@@ -77,6 +77,7 @@ public class WorkspaceService : IWorkspaceService
         try
         {
             var workspace = await _context.WorkSpaces
+                .Include(w => w.Histories)
                 .Include(w => w.Environements)
                 .Include(w => w.Collections)
                 .ThenInclude(c => c.Folders)

@@ -207,7 +207,12 @@ namespace Apilot.Infrastructure.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("WorkSpaceId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkSpaceId");
 
                     b.ToTable("Histories");
                 });
@@ -389,21 +394,6 @@ namespace Apilot.Infrastructure.Migrations
                     b.ToTable("WorkSpaces");
                 });
 
-            modelBuilder.Entity("HistoryEntityRequestEntity", b =>
-                {
-                    b.Property<int>("HistoryEntityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RequestsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("HistoryEntityId", "RequestsId");
-
-                    b.HasIndex("RequestsId");
-
-                    b.ToTable("HistoryRequests", (string)null);
-                });
-
             modelBuilder.Entity("Apilot.Domain.Entities.CollectionEntity", b =>
                 {
                     b.HasOne("Apilot.Domain.Entities.WorkSpaceEntity", "WorkSpaceEntity")
@@ -435,6 +425,79 @@ namespace Apilot.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("CollectionEntity");
+                });
+
+            modelBuilder.Entity("Apilot.Domain.Entities.HistoryEntity", b =>
+                {
+                    b.HasOne("Apilot.Domain.Entities.WorkSpaceEntity", "WorkSpace")
+                        .WithMany("Histories")
+                        .HasForeignKey("WorkSpaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsMany("Apilot.Domain.Entities.HistoryRequestEntity", "Requests", b1 =>
+                        {
+                            b1.Property<int>("HistoryEntityId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("Body")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Headers")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("HttpMethod")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Url")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("HistoryEntityId", "Id");
+
+                            b1.ToTable("HistoryRequestEntity");
+
+                            b1.WithOwner()
+                                .HasForeignKey("HistoryEntityId");
+
+                            b1.OwnsOne("Apilot.Domain.Entities.AuthenticationEntity", "Authentication", b2 =>
+                                {
+                                    b2.Property<int>("HistoryRequestEntityHistoryEntityId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("HistoryRequestEntityId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<string>("AuthData")
+                                        .IsRequired()
+                                        .HasColumnType("nvarchar(max)");
+
+                                    b2.Property<int>("AuthType")
+                                        .HasColumnType("int");
+
+                                    b2.HasKey("HistoryRequestEntityHistoryEntityId", "HistoryRequestEntityId");
+
+                                    b2.ToTable("HistoryRequestEntity");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("HistoryRequestEntityHistoryEntityId", "HistoryRequestEntityId");
+                                });
+
+                            b1.Navigation("Authentication")
+                                .IsRequired();
+                        });
+
+                    b.Navigation("Requests");
+
+                    b.Navigation("WorkSpace");
                 });
 
             modelBuilder.Entity("Apilot.Domain.Entities.RequestEntity", b =>
@@ -529,21 +592,6 @@ namespace Apilot.Infrastructure.Migrations
                     b.Navigation("Request");
                 });
 
-            modelBuilder.Entity("HistoryEntityRequestEntity", b =>
-                {
-                    b.HasOne("Apilot.Domain.Entities.HistoryEntity", null)
-                        .WithMany()
-                        .HasForeignKey("HistoryEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Apilot.Domain.Entities.RequestEntity", null)
-                        .WithMany()
-                        .HasForeignKey("RequestsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Apilot.Domain.Entities.CollectionEntity", b =>
                 {
                     b.Navigation("Folders");
@@ -566,6 +614,8 @@ namespace Apilot.Infrastructure.Migrations
                     b.Navigation("Collections");
 
                     b.Navigation("Environements");
+
+                    b.Navigation("Histories");
                 });
 #pragma warning restore 612, 618
         }

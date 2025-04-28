@@ -5,7 +5,6 @@ namespace Apilot.Application.DTOs.Request;
 
 public class HistoryRequestDto
 {
-    public required string Name { get; set; }
     public ApiHttpMethod HttpMethod { get; set; }
     public required string Url { get; set; }
     public Dictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();

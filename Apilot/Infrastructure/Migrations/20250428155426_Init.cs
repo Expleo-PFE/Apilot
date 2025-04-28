@@ -12,27 +12,6 @@ namespace Apilot.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Histories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    IsSync = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastSyncDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SyncId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Histories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "WorkSpaces",
                 columns: table => new
                 {
@@ -113,6 +92,34 @@ namespace Apilot.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Histories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WorkSpaceId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsSync = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastSyncDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SyncId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Histories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Histories_WorkSpaces_WorkSpaceId",
+                        column: x => x.WorkSpaceId,
+                        principalTable: "WorkSpaces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Folders",
                 columns: table => new
                 {
@@ -136,6 +143,31 @@ namespace Apilot.Infrastructure.Migrations
                         name: "FK_Folders_Collections_CollectionId",
                         column: x => x.CollectionId,
                         principalTable: "Collections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HistoryRequestEntity",
+                columns: table => new
+                {
+                    HistoryEntityId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HttpMethod = table.Column<int>(type: "int", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Headers = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Authentication_AuthType = table.Column<int>(type: "int", nullable: false),
+                    Authentication_AuthData = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoryRequestEntity", x => new { x.HistoryEntityId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_HistoryRequestEntity_Histories_HistoryEntityId",
+                        column: x => x.HistoryEntityId,
+                        principalTable: "Histories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -178,30 +210,6 @@ namespace Apilot.Infrastructure.Migrations
                         column: x => x.FolderId,
                         principalTable: "Folders",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "HistoryRequests",
-                columns: table => new
-                {
-                    HistoryEntityId = table.Column<int>(type: "int", nullable: false),
-                    RequestsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HistoryRequests", x => new { x.HistoryEntityId, x.RequestsId });
-                    table.ForeignKey(
-                        name: "FK_HistoryRequests_Histories_HistoryEntityId",
-                        column: x => x.HistoryEntityId,
-                        principalTable: "Histories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_HistoryRequests_Requests_RequestsId",
-                        column: x => x.RequestsId,
-                        principalTable: "Requests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -260,9 +268,9 @@ namespace Apilot.Infrastructure.Migrations
                 column: "CollectionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HistoryRequests_RequestsId",
-                table: "HistoryRequests",
-                column: "RequestsId");
+                name: "IX_Histories_WorkSpaceId",
+                table: "Histories",
+                column: "WorkSpaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Requests_CollectionId",
@@ -287,7 +295,7 @@ namespace Apilot.Infrastructure.Migrations
                 name: "Environments");
 
             migrationBuilder.DropTable(
-                name: "HistoryRequests");
+                name: "HistoryRequestEntity");
 
             migrationBuilder.DropTable(
                 name: "Responses");
