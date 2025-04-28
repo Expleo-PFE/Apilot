@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Apilot.Migrations
+namespace Apilot.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -84,7 +84,7 @@ namespace Apilot.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Environements",
+                name: "Environments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -103,9 +103,9 @@ namespace Apilot.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Environements", x => x.Id);
+                    table.PrimaryKey("PK_Environments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Environements_WorkSpaces_WorkSpaceId",
+                        name: "FK_Environments_WorkSpaces_WorkSpaceId",
                         column: x => x.WorkSpaceId,
                         principalTable: "WorkSpaces",
                         principalColumn: "Id",
@@ -153,8 +153,8 @@ namespace Apilot.Migrations
                     Authentication_AuthType = table.Column<int>(type: "int", nullable: false),
                     Authentication_AuthData = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FolderId = table.Column<int>(type: "int", nullable: false),
-                    CollectionId = table.Column<int>(type: "int", nullable: false),
+                    FolderId = table.Column<int>(type: "int", nullable: true),
+                    CollectionId = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsSync = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -171,13 +171,13 @@ namespace Apilot.Migrations
                         name: "FK_Requests_Collections_CollectionId",
                         column: x => x.CollectionId,
                         principalTable: "Collections",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Requests_Folders_FolderId",
                         column: x => x.FolderId,
                         principalTable: "Folders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -250,8 +250,8 @@ namespace Apilot.Migrations
                 column: "WorkSpaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Environements_WorkSpaceId",
-                table: "Environements",
+                name: "IX_Environments_WorkSpaceId",
+                table: "Environments",
                 column: "WorkSpaceId");
 
             migrationBuilder.CreateIndex(
@@ -284,7 +284,7 @@ namespace Apilot.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Environements");
+                name: "Environments");
 
             migrationBuilder.DropTable(
                 name: "HistoryRequests");

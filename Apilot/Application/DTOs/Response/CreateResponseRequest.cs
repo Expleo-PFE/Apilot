@@ -2,7 +2,7 @@
 
 namespace Apilot.Application.DTOs.Response;
 
-public class CreateResponseDto
+public class CreateResponseRequest
 {
     public int StatusCode { get; set; }
     public required string StatusText { get; set; }

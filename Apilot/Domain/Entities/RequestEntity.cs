@@ -14,7 +14,7 @@ public class RequestEntity : BaseEntity
     
     public int? FolderId { get; set; }
     public FolderEntity FolderEntity { get; set; }
-    public int CollectionId { get; set; }
+    public int? CollectionId { get; set; }
     public CollectionEntity CollectionEntity { get; set; }
     
     public List<ResponseEntity> Responses { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Apilot.Application.DTOs.History;
 
-public class CreateHistoryDto
+public class CreateHistoryRequest
 {
     
     public required RequestDto Requests { get; set; } 

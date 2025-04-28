@@ -9,5 +9,5 @@ public class WorkSpaceEntity : BaseEntity
     
     
     public List<CollectionEntity> Collections { get; set; }
-    public List<EnvironementEntity> Environements { get; set; }
+    public List<EnvironmentEntity> Environements { get; set; }
 }

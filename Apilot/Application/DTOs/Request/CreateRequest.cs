@@ -4,7 +4,7 @@ using Apilot.Domain.Enums;
 
 namespace Apilot.Application.DTOs.Request;
 
-public class CreateRequestDto
+public class CreateRequest
 {
     [Required]
     public required string Name { get; set; }
@@ -22,6 +22,6 @@ public class CreateRequestDto
     public required string Body { get; set; }
     
     public int? FolderId { get; set; }
-    [Required]
-    public int CollectionId { get; set; }
+    
+    public int? CollectionId { get; set; }
 }

@@ -2,7 +2,7 @@
 
 namespace Apilot.Domain.Entities;
 
-public class EnvironementEntity : BaseEntity
+public class EnvironmentEntity : BaseEntity
 {
     public string Name { get; set; }
     public int WorkSpaceId { get; set; }

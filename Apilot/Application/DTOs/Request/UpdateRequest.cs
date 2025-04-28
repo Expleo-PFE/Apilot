@@ -4,7 +4,7 @@ using Apilot.Domain.Enums;
 
 namespace Apilot.Application.DTOs.Request;
 
-public class UpdateRequestDto
+public class UpdateRequest
 {
     [Required]
     public int Id { get; set; }

@@ -15,14 +15,14 @@ public class ApplicationDbContext : DbContext
     public DbSet<FolderEntity> Folders { get; set; }
     public DbSet<RequestEntity> Requests { get; set; }
     public DbSet<ResponseEntity> Responses { get; set; }
-    public DbSet<EnvironementEntity> Environements { get; set; }
+    public DbSet<EnvironmentEntity> Environments { get; set; }
     public DbSet<HistoryEntity> Histories { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // WorkSpace relationships
+      
         modelBuilder.Entity<WorkSpaceEntity>()
             .HasMany(w => w.Collections)
             .WithOne(c => c.WorkSpaceEntity)
@@ -35,7 +35,7 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(e => e.WorkSpaceId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Collection relationships
+       
         modelBuilder.Entity<CollectionEntity>()
             .HasMany(c => c.Folders)
             .WithOne(f => f.CollectionEntity)
@@ -46,36 +46,31 @@ public class ApplicationDbContext : DbContext
             .HasMany(c => c.HttpRequests)
             .WithOne(r => r.CollectionEntity)
             .HasForeignKey(r => r.CollectionId)
-            .OnDelete(DeleteBehavior.NoAction); // Using NoAction because of potential circular cascade path with Folder
+            .OnDelete(DeleteBehavior.Cascade); 
 
-        // Folder relationships
+       
         modelBuilder.Entity<FolderEntity>()
             .HasMany(f => f.HttpRequests)
             .WithOne(r => r.FolderEntity)
             .HasForeignKey(r => r.FolderId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
-        // HttpRequest relationships
+       
         modelBuilder.Entity<RequestEntity>()
             .HasMany(r => r.Responses)
             .WithOne(r => r.Request)
             .HasForeignKey(r => r.RequestId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // History relationships
-        modelBuilder.Entity<HistoryEntity>()
-            .HasMany(h => h.Requests)
-            .WithMany() // Many-to-many without navigation property back to History
-            .UsingEntity(j => j.ToTable("HistoryRequests"));
-
-        // Complex types and owned entities
+       
+        
         modelBuilder.Entity<RequestEntity>()
             .OwnsOne(r => r.Authentication, authentication =>
             {
-                // Configure the owned entity's properties here
+             
                 authentication.Property(a => a.AuthType);
                 
-                // Configure the Dictionary property within the owned entity
+                
                 authentication.Property(a => a.AuthData)
                     .HasConversion(
                         v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
@@ -85,8 +80,8 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<ResponseEntity>()
             .OwnsOne(r => r.CookiesEntity);
 
-        // Dictionary properties configuration
-        modelBuilder.Entity<EnvironementEntity>()
+       
+        modelBuilder.Entity<EnvironmentEntity>()
             .Property(e => e.Variables)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
@@ -104,6 +99,15 @@ public class ApplicationDbContext : DbContext
                 v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
                 v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, new JsonSerializerOptions()) ?? new Dictionary<string, string>());
 
+        
+        
+        modelBuilder.Entity<WorkSpaceEntity>().HasQueryFilter(p => !p.IsDeleted);
+        modelBuilder.Entity<CollectionEntity>().HasQueryFilter(p => !p.IsDeleted);
+        modelBuilder.Entity<FolderEntity>().HasQueryFilter(p => !p.IsDeleted);
+        modelBuilder.Entity<RequestEntity>().HasQueryFilter(p => !p.IsDeleted);
+        modelBuilder.Entity<ResponseEntity>().HasQueryFilter(p => !p.IsDeleted);
+        modelBuilder.Entity<EnvironmentEntity>().HasQueryFilter(p => !p.IsDeleted);
+        modelBuilder.Entity<HistoryEntity>().HasQueryFilter(p => !p.IsDeleted);
       
     }
 }

@@ -4,16 +4,19 @@ using Apilot.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Apilot.Migrations
+namespace Apilot.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250428103356_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +76,7 @@ namespace Apilot.Migrations
                     b.ToTable("Collections");
                 });
 
-            modelBuilder.Entity("Apilot.Domain.Entities.EnvironementEntity", b =>
+            modelBuilder.Entity("Apilot.Domain.Entities.EnvironmentEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,7 +124,7 @@ namespace Apilot.Migrations
 
                     b.HasIndex("WorkSpaceId");
 
-                    b.ToTable("Environements");
+                    b.ToTable("Environments");
                 });
 
             modelBuilder.Entity("Apilot.Domain.Entities.FolderEntity", b =>
@@ -224,7 +227,7 @@ namespace Apilot.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CollectionId")
+                    b.Property<int?>("CollectionId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -415,7 +418,7 @@ namespace Apilot.Migrations
                     b.Navigation("WorkSpaceEntity");
                 });
 
-            modelBuilder.Entity("Apilot.Domain.Entities.EnvironementEntity", b =>
+            modelBuilder.Entity("Apilot.Domain.Entities.EnvironmentEntity", b =>
                 {
                     b.HasOne("Apilot.Domain.Entities.WorkSpaceEntity", "WorkSpaceEntity")
                         .WithMany("Environements")
@@ -442,13 +445,12 @@ namespace Apilot.Migrations
                     b.HasOne("Apilot.Domain.Entities.CollectionEntity", "CollectionEntity")
                         .WithMany("HttpRequests")
                         .HasForeignKey("CollectionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Apilot.Domain.Entities.FolderEntity", "FolderEntity")
                         .WithMany("HttpRequests")
                         .HasForeignKey("FolderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.OwnsOne("Apilot.Domain.Entities.AuthenticationEntity", "Authentication", b1 =>
                         {

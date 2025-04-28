@@ -2,7 +2,7 @@
 
 namespace Apilot.Application.DTOs.Envirenoment;
 
-public class CreateEnvironmentDto
+public class CreateEnvironmentRequest
 {
     [Required]
     public required string Name { get; set; }
@@ -10,5 +10,4 @@ public class CreateEnvironmentDto
     [Required]
     public int WorkSpaceId { get; set; }
     
-    public required Dictionary<string, string> Variables { get; set; } = new Dictionary<string, string>();
 }

@@ -22,7 +22,7 @@ public class MappingProfile : Profile
         CreateMap<AuthenticationEntity, AuthenticationDto>().ReverseMap();
         CreateMap<ResponseEntity, ResponseDto>().ReverseMap();
         CreateMap<ResponseCookiesEntity, ResponseCookiesDto>().ReverseMap();
-        CreateMap<EnvironementEntity, EnvironmentDto>().ReverseMap();
+        CreateMap<EnvironmentEntity, EnvironmentDto>().ReverseMap();
         CreateMap<HistoryEntity, HistoryDto>().ReverseMap();
 
         
