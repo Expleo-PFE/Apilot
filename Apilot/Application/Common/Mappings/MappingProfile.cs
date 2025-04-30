@@ -25,6 +25,10 @@ public class MappingProfile : Profile
         
         
         CreateMap<FolderEntity, FolderDto>().ReverseMap();
+        CreateMap<CreateFolderRequest, FolderEntity>().ReverseMap();
+        CreateMap<UpdateFolderRequest, FolderEntity>().ReverseMap();
+        
+        
         CreateMap<RequestEntity, RequestDto>().ReverseMap();
         CreateMap<AuthenticationEntity, AuthenticationDto>().ReverseMap();
         CreateMap<ResponseEntity, ResponseDto>().ReverseMap();

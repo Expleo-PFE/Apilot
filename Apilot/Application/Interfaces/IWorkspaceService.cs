@@ -8,5 +8,5 @@ public interface IWorkspaceService
     Task<List<WorkSpaceDto>> GetAllWorkspacesAsync();
     Task<WorkSpaceDto> GetWorkspaceByIdAsync(int id);
     Task UpdateWorkspaceAsync(UpdateWorkSpaceRequest updateWorkSpaceRequest);
-    Task<bool> DeleteWorkspaceAsync(int id);
+    Task DeleteWorkspaceAsync(int id);
 }

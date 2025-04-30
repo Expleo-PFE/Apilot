@@ -9,5 +9,5 @@ public interface ICollectionService
     Task<CollectionDto> GetCollectionByIdAsync(int id);
     Task<List<CollectionDto>> GetCollectionsByWorkspaceIdAsync(int workspaceId);
     Task UpdateCollectionAsync(UpdateCollectionRequest updateCollectionRequest);
-    Task<bool> DeleteCollectionAsync(int id);
+    Task DeleteCollectionAsync(int id);
 }

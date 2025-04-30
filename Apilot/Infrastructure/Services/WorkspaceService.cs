@@ -142,7 +142,7 @@ public class WorkspaceService : IWorkspaceService
         }
     }
 
-    public async Task<bool> DeleteWorkspaceAsync(int id)
+    public async Task DeleteWorkspaceAsync(int id)
     {
         _logger.LogInformation("Soft deleting workspace with ID: {Id}", id);
 
@@ -162,11 +162,10 @@ public class WorkspaceService : IWorkspaceService
             workspace.UpdatedBy = "admin"; 
             workspace.IsSync = false;
             
-            _context.WorkSpaces.Update(workspace);
             await _context.SaveChangesAsync();
             
             _logger.LogInformation("Workspace with ID {Id} deleted successfully", id);
-            return true;
+           
         }
         catch (KeyNotFoundException)
         {

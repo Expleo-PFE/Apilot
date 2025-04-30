@@ -8,6 +8,6 @@ public interface IFolderService
     Task<List<FolderDto>> GetAllFoldersAsync();
     Task<FolderDto> GetFolderByIdAsync(int id);
     Task<List<FolderDto>> GetFoldersByCollectionIdAsync(int collectionId);
-    Task<FolderDto> UpdateFolderAsync(UpdateFolderRequest updateFolderRequest);
-    Task<bool> DeleteFolderAsync(int id);
+    Task UpdateFolderAsync(UpdateFolderRequest updateFolderRequest);
+    Task DeleteFolderAsync(int id);
 }

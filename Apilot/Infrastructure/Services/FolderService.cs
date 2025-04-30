@@ -123,7 +123,7 @@ public class FolderService : IFolderService
         }
     }
 
-    public async Task<FolderDto> UpdateFolderAsync(UpdateFolderRequest updateFolderRequest)
+    public async Task UpdateFolderAsync(UpdateFolderRequest updateFolderRequest)
     {
         try
         {
@@ -137,17 +137,15 @@ public class FolderService : IFolderService
                 _logger.LogWarning("Folder with ID {Id} not found for update", updateFolderRequest.Id);
                 throw new KeyNotFoundException($"Folder with ID {updateFolderRequest.Id} not found");
             }
-            
-            folder.Name = updateFolderRequest.Name;
+            _mapper.Map(updateFolderRequest, folder);
             folder.UpdatedAt = DateTime.UtcNow;
             folder.UpdatedBy = "admin"; 
             folder.IsSync = false; 
             
-            _context.Folders.Update(folder);
             await _context.SaveChangesAsync();
             
             _logger.LogInformation("Folder with ID: {Id} updated successfully", folder.Id);
-            return _mapper.Map<FolderDto>(folder);
+            
         }
         catch (KeyNotFoundException)
         {
@@ -160,7 +158,7 @@ public class FolderService : IFolderService
         }
     }
 
-    public async Task<bool> DeleteFolderAsync(int id)
+    public async Task DeleteFolderAsync(int id)
     {
         try
         {
@@ -182,8 +180,7 @@ public class FolderService : IFolderService
             await _context.SaveChangesAsync();
             
             _logger.LogInformation("Folder with ID: {Id} deleted successfully", id);
-
-            return true;
+            
         }
         catch (KeyNotFoundException)
         {

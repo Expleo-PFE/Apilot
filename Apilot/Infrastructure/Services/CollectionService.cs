@@ -167,7 +167,7 @@ public class CollectionService : ICollectionService
         }
     }
 
-    public async Task<bool> DeleteCollectionAsync(int id)
+    public async Task DeleteCollectionAsync(int id)
     {
         try
         {
@@ -188,11 +188,9 @@ public class CollectionService : ICollectionService
 
            
             // _context.Collections.Remove(collection);
-
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Collection with ID: {Id} deleted successfully", id);
-            return true;
         }
         catch (KeyNotFoundException)
         {
