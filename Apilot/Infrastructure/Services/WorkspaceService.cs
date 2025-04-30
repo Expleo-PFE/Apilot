@@ -107,7 +107,7 @@ public class WorkspaceService : IWorkspaceService
         }
     }
 
-    public async Task<WorkSpaceDto> UpdateWorkspaceAsync(UpdateWorkSpaceRequest updateWorkSpaceRequest)
+    public async Task UpdateWorkspaceAsync(UpdateWorkSpaceRequest updateWorkSpaceRequest)
     {
         _logger.LogInformation("Updating workspace with ID: {Id}", updateWorkSpaceRequest.Id);
 
@@ -122,17 +122,14 @@ public class WorkspaceService : IWorkspaceService
                 throw new KeyNotFoundException($"Workspace with ID {updateWorkSpaceRequest.Id} not found");
             }
             
-            workspace.Name = updateWorkSpaceRequest.Name;
-            workspace.Description = updateWorkSpaceRequest.Description;
+            _mapper.Map(updateWorkSpaceRequest, workspace);
             workspace.UpdatedAt = DateTime.UtcNow;
-            workspace.UpdatedBy = "admin"; 
+            workspace.UpdatedBy = "admin";
             workspace.IsSync = false;
-            
-            _context.WorkSpaces.Update(workspace);
             await _context.SaveChangesAsync();
             
             _logger.LogInformation("Workspace with ID {Id} updated successfully", updateWorkSpaceRequest.Id);
-            return _mapper.Map<WorkSpaceDto>(workspace);
+           
         }
         catch (KeyNotFoundException)
         {

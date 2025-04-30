@@ -29,17 +29,13 @@ public class CollectionService : ICollectionService
         {
             _logger.LogInformation("Creating collection with name: {Name}", createCollectionRequest.Name);
             
-            var collection = new CollectionEntity
-            {
-                Name = createCollectionRequest.Name, 
-                Description = createCollectionRequest.Description,
-                WorkSpaceId = createCollectionRequest.WorkSpaceId,
-                CreatedAt = DateTime.UtcNow,
-                IsSync = false,
-                IsDeleted = false,
-                SyncId = Guid.NewGuid(),
-                CreatedBy = "admin",
-            };
+            var collection = _mapper.Map<CollectionEntity>(createCollectionRequest);
+            
+            collection.IsDeleted = false;
+            collection.IsSync = false;
+            collection.CreatedAt = DateTime.Now;
+            collection.CreatedBy = "admin";
+            collection.SyncId = Guid.NewGuid();
             
             await _context.Collections.AddAsync(collection);
             await _context.SaveChangesAsync();
@@ -133,7 +129,7 @@ public class CollectionService : ICollectionService
         }
     }
 
-    public async Task<CollectionDto> UpdateCollectionAsync(UpdateCollectionRequest updateCollectionRequest)
+    public async Task UpdateCollectionAsync(UpdateCollectionRequest updateCollectionRequest)
     {
         try
         {
@@ -149,24 +145,16 @@ public class CollectionService : ICollectionService
             }
         
             
-            collection.Name = updateCollectionRequest.Name;
-            collection.Description = updateCollectionRequest.Description;
+            _mapper.Map(updateCollectionRequest, collection);
             collection.UpdatedAt = DateTime.UtcNow;
             collection.UpdatedBy = "admin"; 
             collection.IsSync = false; 
-        
-            _context.Collections.Update(collection);
+            
             await _context.SaveChangesAsync();
         
             _logger.LogInformation("Collection with ID: {Id} updated successfully", collection.Id);
         
             
-            var updatedCollection = await _context.Collections
-                .Include(c => c.HttpRequests)
-                .Include(w => w.Folders).ThenInclude(f => f.HttpRequests).ThenInclude(req => req.Responses)
-                .FirstOrDefaultAsync(c => c.Id == collection.Id);
-            
-            return _mapper.Map<CollectionDto>(updatedCollection);
         }
         catch (KeyNotFoundException)
         {

@@ -16,7 +16,14 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<WorkSpaceEntity, WorkSpaceDto>().ReverseMap();
+        CreateMap<CreateWorkSpaceRequest, WorkSpaceEntity>().ReverseMap();
+        CreateMap<UpdateWorkSpaceRequest, WorkSpaceEntity>().ReverseMap();
+        
         CreateMap<CollectionEntity, CollectionDto>().ReverseMap();
+        CreateMap<CreateCollectionRequest, CollectionEntity>().ReverseMap();
+        CreateMap<UpdateCollectionRequest, CollectionEntity>().ReverseMap();
+        
+        
         CreateMap<FolderEntity, FolderDto>().ReverseMap();
         CreateMap<RequestEntity, RequestDto>().ReverseMap();
         CreateMap<AuthenticationEntity, AuthenticationDto>().ReverseMap();
